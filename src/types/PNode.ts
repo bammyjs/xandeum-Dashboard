@@ -9,5 +9,6 @@ export interface PNode {
   cpuPercent?: number
   ramUsedGb?: number
   ramTotalGb?: number
+  ramUsedPercent?: number
   uptimeSeconds?: number
 }

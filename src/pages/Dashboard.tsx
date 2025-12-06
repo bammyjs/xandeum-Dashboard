@@ -10,6 +10,8 @@ import ResourceArea from '../components/charts/ResourceArea'
 export default function Dashboard() {
   const dispatch = useAppDispatch()
   const nodes = useAppSelector(s => s.pnodes.items)
+  const uptimeHistory = useAppSelector(s => s.pnodes.uptimeHistory)
+  const historyWindow = useAppSelector(s => s.pnodes.historyWindow)
   useEffect(() => {
     dispatch(fetchPNodes())
   }, [dispatch])
@@ -21,7 +23,7 @@ export default function Dashboard() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <StatusPie nodes={nodes} />
-        <ResourceArea nodes={nodes} />
+        <ResourceArea nodes={nodes} uptimeHistory={uptimeHistory} historyWindow={historyWindow} />
       </div>
       <PNodeTable />
     </div>

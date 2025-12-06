@@ -89,9 +89,12 @@ export async function fetchPNodesFromGossip(): Promise<import('../types/PNode').
       const ramTotal = r['ram_total']
       const ramUsedGb = typeof ramUsed === 'number' ? Math.round((ramUsed / 1_000_000_000) * 10) / 10 : undefined
       const ramTotalGb = typeof ramTotal === 'number' ? Math.round((ramTotal / 1_000_000_000) * 10) / 10 : undefined
+      const ramUsedPercent = typeof ramUsedGb === 'number' && typeof ramTotalGb === 'number' && ramTotalGb > 0
+        ? Math.round(((ramUsedGb / ramTotalGb) * 100) * 10) / 10
+        : undefined
       const uptime = r['uptime']
       const uptimeSeconds = typeof uptime === 'number' ? uptime : undefined
-      return { id, gossipAddress: addr, status, storageGb, region: undefined, version, lastSeen, cpuPercent, ramUsedGb, ramTotalGb, uptimeSeconds }
+      return { id, gossipAddress: addr, status, storageGb, region: undefined, version, lastSeen, cpuPercent, ramUsedGb, ramTotalGb, ramUsedPercent, uptimeSeconds }
     }
     const id = String((r['id'] ?? r['nodeId'] ?? r['__ip'] ?? '') as string)
     const ip = r['__ip']
