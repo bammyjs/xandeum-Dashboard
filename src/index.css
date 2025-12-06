@@ -1,0 +1,148 @@
+@import 'tailwindcss';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  color-scheme: 'light';
+}
+
+@theme {
+  --color-base-white: #ffffff;
+  --color-base-black: #000000;
+  --color-primary: #5412b2;
+  --color-secondary: #ff832b;
+  --color-brand-secondary: #ff832b;
+
+  --color-brand-50: #faf5fb;
+  --color-brand-100: #f5eaf7;
+  --color-brand-200: #ebd5f0;
+  --color-brand-300: #dcb0e3;
+  --color-brand-400: #c87fd0;
+  --color-brand-500: #b04db9;
+  --color-brand-600: #9a3ca3;
+  --color-brand-700: #7e2f86;
+  --color-brand-800: #672a6e;
+  --color-brand-900: #55255b;
+  --color-brand-950: #2f1233;
+  --color-brand-base: #5412b2;
+
+  --color-negative-50: #fdf3f3;
+  --color-negative-100: #fbe5e5;
+  --color-negative-200: #f8d0d0;
+  --color-negative-300: #f1b0b0;
+  --color-negative-400: #e88181;
+  --color-negative-500: #d84e4e;
+  --color-negative-600: #c63c3c;
+  --color-negative-700: #a62f2f;
+  --color-negative-800: #8a2a2a;
+  --color-negative-900: #732929;
+  --color-negative-950: #3e1111;
+
+  --color-warning-50: #ffffea;
+  --color-warning-100: #fffbc5;
+  --color-warning-200: #fff885;
+  --color-warning-300: #ffee46;
+  --color-warning-400: #ffdf1b;
+  --color-warning-500: #ffc107;
+  --color-warning-600: #e29400;
+  --color-warning-700: #bb6902;
+  --color-warning-800: #985108;
+  --color-warning-900: #7c420b;
+  --color-warning-950: #482200;
+
+  --color-positive-25: #f6fef9;
+  --color-positive-50: #ecfdf3;
+  --color-positive-100: #d1fadf;
+  --color-positive-200: #a6f4c5;
+  --color-positive-300: #6ce9a6;
+  --color-positive-400: #32d583;
+  --color-positive-500: #009946;
+  --color-positive-600: #039855;
+  --color-positive-700: #027a48;
+  --color-positive-800: #05603a;
+  --color-positive-900: #054f31;
+
+  --color-neutral-50: #f6f8fb;
+  --color-neutral-100: #e6e8ec;
+  --color-neutral-200: #dee1e4;
+  --color-neutral-300: #c6cace;
+  --color-neutral-400: #a7acb1;
+  --color-neutral-500: #8c9098;
+  --color-neutral-600: #6b6f75;
+  --color-neutral-700: #505258;
+  --color-neutral-800: #36393d;
+  --color-neutral-900: #242628;
+  --color-neutral-base: #1e1e20;
+
+  /* Radius */
+  --radius-selector: 2rem;
+  --radius-field: 0rem;
+  --radius-box: 1rem;
+
+  /* Size */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* Font */
+  --font-size-small: 0.75rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.5rem;
+  --font-size-extra-large: 2rem;
+  --font-family: 'Inter', sans-serif;
+  --font-family-slim: 'Inter', sans-serif;
+  --font-family-median: 'Inter', sans-serif;
+  --font-family-bulky: 'Inter', sans-serif;
+  --font-family-neutral: 'Inter', sans-serif;
+  --font-family-slim-wide: 'Inter', sans-serif;
+  --font-family-median-wide: 'Inter', sans-serif;
+  --font-family-bulky-wide: 'Inter', sans-serif;
+  --font-family-neutral-wide: 'Inter', sans-serif;
+
+  /* Font Weights */
+  --font-weight-slim: 300;
+  --font-weight-median: 400;
+  --font-weight-bulky: 700;
+  --font-weight-neutral: 600;
+  --font-weight-neutral-wide: 600;
+
+  /* Shadow */
+  --shadow-level-1: 0 0 0.1rem rgba(0, 0, 0, 0.1);
+  --shadow-level-2: 0 0 0.2rem rgba(0, 0, 0, 0.2);
+  --shadow-level-3: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+
+  /* Transition */
+  --transition: background-color 0.3s ease, color 0.3s ease;
+
+  /* Background */
+  --border: 1.5px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  /* Show scrollbar */
+  .scrollbar::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-300);
+    border-radius: 4px;
+  }
+  .scrollbar {
+    -ms-overflow-style: auto; /* IE and Edge */
+    scrollbar-width: thin; /* Firefox */
+  }
+}
