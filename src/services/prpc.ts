@@ -73,9 +73,11 @@ export async function fetchPNodesFromGossip(): Promise<import('../types/PNode').
     const r = n as Record<string, unknown>
     const isStats = 'cpu_percent' in r || 'uptime' in r
     if (isStats) {
-      const id = String((r['current_index'] ?? r['__ip'] ?? 'node') as number | string)
       const ip = r['__ip']
       const addr = typeof ip === 'string' ? `http://${ip}:6000` : String(import.meta.env.VITE_PNODE_RPC_ENDPOINT ?? '/prpc')
+      const id = typeof ip === 'string'
+        ? String(ip)
+        : String((r['id'] ?? r['nodeId'] ?? r['current_index'] ?? addr) as number | string)
       const status = 'online'
       const fileSize = typeof r['file_size'] === 'number' ? (r['file_size'] as number) : undefined
       const storageGb = typeof fileSize === 'number' ? Math.round((fileSize / 1_000_000_000) * 10) / 10 : undefined
@@ -94,7 +96,13 @@ export async function fetchPNodesFromGossip(): Promise<import('../types/PNode').
         : undefined
       const uptime = r['uptime']
       const uptimeSeconds = typeof uptime === 'number' ? uptime : undefined
-      return { id, gossipAddress: addr, status, storageGb, region: undefined, version, lastSeen, cpuPercent, ramUsedGb, ramTotalGb, ramUsedPercent, uptimeSeconds }
+      const activeStreams = typeof r['active_streams'] === 'number' ? (r['active_streams'] as number) : undefined
+      const packetsReceived = typeof r['packets_received'] === 'number' ? (r['packets_received'] as number) : undefined
+      const packetsSent = typeof r['packets_sent'] === 'number' ? (r['packets_sent'] as number) : undefined
+      const totalBytes = typeof r['total_bytes'] === 'number' ? (r['total_bytes'] as number) : undefined
+      const totalPages = typeof r['total_pages'] === 'number' ? (r['total_pages'] as number) : undefined
+      const nodeIndex = typeof r['current_index'] === 'number' ? (r['current_index'] as number) : undefined
+      return { id, gossipAddress: addr, status, storageGb, region: undefined, version, lastSeen, cpuPercent, ramUsedGb, ramTotalGb, ramUsedPercent, uptimeSeconds, activeStreams, packetsReceived, packetsSent, totalBytes, totalPages, nodeIndex }
     }
     const id = String((r['id'] ?? r['nodeId'] ?? r['__ip'] ?? '') as string)
     const ip = r['__ip']

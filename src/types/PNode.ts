@@ -11,4 +11,10 @@ export interface PNode {
   ramTotalGb?: number
   ramUsedPercent?: number
   uptimeSeconds?: number
+  activeStreams?: number
+  packetsReceived?: number
+  packetsSent?: number
+  totalBytes?: number
+  totalPages?: number
+  nodeIndex?: number
 }
