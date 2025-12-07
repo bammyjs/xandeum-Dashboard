@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { PNode } from '../types/PNode'
-import PNodeCard from '../components/PNodeCard'
+import type { PNode } from '@src/types/PNode'
+import PNodeCard from '@components/PNodeCard'
 import { useAppDispatch, useAppSelector } from '../hooks'
-import { fetchPNodes } from '../features/pnodes/pnodesSlice'
-import PNodeTable from '../components/PNodeTable'
-import MobileFiltersModal from '../components/MobileFiltersModal'
-import DashboardFiltersBar from '../components/DashboardFiltersBar'
+import { fetchPNodes } from '@src/features/pnodes/pnodesSlice'
+import PNodeTable from '@components/PNodeTable'
+import MobileFiltersModal from '@components/MobileFiltersModal'
+import DashboardFiltersBar from '@components/DashboardFiltersBar'
 
 export default function Dashboard() {
   const dispatch = useAppDispatch()

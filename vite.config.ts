@@ -15,6 +15,12 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['src/test/setup.ts'],
+    globals: false,
+    css: true
+  },
   server: {
     proxy: (() => {
       const defaultSeeds = [
