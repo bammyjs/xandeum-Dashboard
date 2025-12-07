@@ -6,8 +6,9 @@ Interactive dashboard for public pNodes. Built with React, TypeScript, Redux Too
 
 - Aggregates node stats via JSON‑RPC and a seed list
 - Dev proxy to avoid CORS when talking to pNodes
-- Table with search, status filter, sorting, and "Online only" toggle
-- Charts: status pie and configurable area chart (CPU/RAM, RAM stacked, Storage)
+- Card and table views with sorting, search, and status
+- Skeleton loading for cards, overview stats, and table rows
+- Navbar shows last fetch time and a Refresh control
 
 ## Prerequisites
 
@@ -49,12 +50,7 @@ Interactive dashboard for public pNodes. Built with React, TypeScript, Redux Too
 
 ## Usage
 
-- Dashboard stats show total, online count, and average storage.
-- Status Pie summarizes Online/Offline/Unknown nodes.
-- Area Chart supports three modes via the dropdown:
-  - CPU & RAM (% and GB)
-  - RAM Used vs Free (stacked)
-  - Storage (GB)
+
 - Table supports search, status filter, sorting, and an "Online only" checkbox.
 
 ## Production Build
@@ -73,9 +69,42 @@ Interactive dashboard for public pNodes. Built with React, TypeScript, Redux Too
 
 3. Host the `dist` folder on any static hosting.
 
-### Reverse Proxy (production)
+### Deploy (Netlify)
 
-In production, the browser cannot call pNodes directly due to CORS. Configure a reverse proxy to forward dashboard paths to pNodes. Example Nginx:
+Netlify provides HTTPS and request proxying so the dashboard can call pNodes without browser CORS/mixed‑content issues.
+
+1. Ensure `netlify.toml` exists at the project root with these redirects:
+
+   ```toml
+   [build]
+     command = "npm run build"
+     publish = "dist"
+
+   [[redirects]]
+     from = "/prpc"
+     to = "http://173.212.203.145:6000/rpc"
+     status = 200
+     force = true
+
+   [[redirects]]
+     from = "/pnode/:ip"
+     to = "http://:ip:6000/rpc"
+     status = 200
+     force = true
+
+   [[redirects]]
+     from = "/*"
+     to = "/index.html"
+     status = 200
+   ```
+
+2. In Netlify, set build command to `npm run build` and publish directory to `dist`.
+3. Keep `VITE_PNODE_RPC_ENDPOINT=/prpc` in your `.env` so requests route through the same origin and are proxied by Netlify.
+4. Deploy. The app will serve over HTTPS and RPC will work via the redirects above.
+
+### Alternative: Reverse Proxy (Nginx)
+
+If you are hosting outside Netlify, configure a reverse proxy to forward dashboard paths to pNodes to avoid CORS. Example Nginx:
 
 ```nginx
 server {
@@ -110,6 +139,7 @@ Adjust the IPs and domain as needed. Ensure only trusted IPs are allowed if you 
 - Method not found (`-32601`): The app falls back to seed aggregation using `get-stats`/`get-version`.
 - 500 from a node: That node is responding with an error; it will appear as offline. Use "Online only" to hide it.
 - Seeds not applied: `.env` must be at the project root and seeds must be comma separated.
+- Offline in production: Serve behind Netlify or a reverse proxy so calls hit `/prpc` and `/pnode/:ip` on the same origin; direct HTTP calls will be blocked by browsers under HTTPS.
 
 ## Scripts
 
