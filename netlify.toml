@@ -1,0 +1,20 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/prpc"
+  to = "http://173.212.203.145:6000/rpc"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/pnode/:ip"
+  to = "http://:ip:6000/rpc"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
