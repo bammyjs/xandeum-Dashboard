@@ -1,23 +1,24 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { PNode } from '../types/PNode'
 import PNodeCard from '../components/PNodeCard'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { fetchPNodes } from '../features/pnodes/pnodesSlice'
 import PNodeTable from '../components/PNodeTable'
-import OverviewStatsGrid from '../components/OverviewStatsGrid'
 import MobileFiltersModal from '../components/MobileFiltersModal'
-import { Filter } from 'lucide-react'
+import DashboardFiltersBar from '../components/DashboardFiltersBar'
 
 export default function Dashboard() {
   const dispatch = useAppDispatch()
   const nodes = useAppSelector(s => s.pnodes.items)
   const lastUpdated = useAppSelector(s => s.pnodes.lastUpdated)
   const onlineStats = useAppSelector(s => s.pnodes.onlineStats)
+  const loading = useAppSelector(s => s.pnodes.loading)
   const [q, setQ] = useState('')
   const [status, setStatus] = useState('')
-  const [sortKey, setSortKey] = useState<'stake' | 'perf' | 'uptime' | ''>('stake')
+  const [sortKey, setSortKey] = useState<'storage' | 'perf' | 'uptime' | ''>('storage')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards')
-  const [cardVariant, setCardVariant] = useState<'compact' | 'detailed'>('detailed')
+  const [cardVariant, setCardVariant] = useState<'compact' | 'detailed'>('compact')
   const [geo, setGeo] = useState<Record<string, string>>({})
   const [filtersOpen, setFiltersOpen] = useState(false)
   type IpApiResp = { city?: string; country_code?: string }
@@ -56,10 +57,10 @@ export default function Dashboard() {
       const bUptime = bu && bu.obs > 0 ? Math.round(((bu.up / bu.obs) * 100) * 10) / 10 : -1
       const aPerf = typeof a.cpuPercent === 'number' ? a.cpuPercent : -1
       const bPerf = typeof b.cpuPercent === 'number' ? b.cpuPercent : -1
-      const aStake = typeof a.storageGb === 'number' ? a.storageGb : -1
-      const bStake = typeof b.storageGb === 'number' ? b.storageGb : -1
-      const ax = sortKey === 'stake' ? aStake : sortKey === 'perf' ? aPerf : aUptime
-      const bx = sortKey === 'stake' ? bStake : sortKey === 'perf' ? bPerf : bUptime
+      const aStorage = typeof a.storageGb === 'number' ? a.storageGb : -1
+      const bStorage = typeof b.storageGb === 'number' ? b.storageGb : -1
+      const ax = sortKey === 'storage' ? aStorage : sortKey === 'perf' ? aPerf : aUptime
+      const bx = sortKey === 'storage' ? bStorage : sortKey === 'perf' ? bPerf : bUptime
       if (ax < 0 && bx < 0) return 0
       if (ax < 0) return sortOrder === 'asc' ? 1 : -1
       if (bx < 0) return sortOrder === 'asc' ? -1 : 1
@@ -90,73 +91,39 @@ export default function Dashboard() {
   }, [dispatch])
 
   return (
-    <div className="container mx-auto px-6 max-w-6xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Overview</h1>
+    <div className="container mx-auto p-4 max-w-6xl">
           <div className="text-sm opacity-70">{lastUpdated ? `Last updated ${new Date(lastUpdated).toLocaleString()}` : ''}</div>
-        </div>
-      </div>
-              <OverviewStatsGrid nodes={nodes} />
-              <div className="space-y-3 mt-4">
-                <div className="flex items-center gap-4 justify-between">
-                <div className="flex items-center gap-3 flex-1">
-                  <input type="text" placeholder="Search by name or node ID..." className="input input-bordered w-full" value={q} onChange={e => setQ(e.target.value)} />
-                </div>
-                <div className="flex items-center justify-between lg:hidden">
-                  <button className="btn btn-outline  p-2" onClick={() => setFiltersOpen(true)}><Filter size={24} /></button>
-                </div>
-                </div>
-                <div className="hidden lg:flex lg:flex-wrap items-center gap-2 my-6">
-                  <div className="flex items-center gap-2">
-                    <span className="opacity-70">Status</span>
-                    <select className="select select-bordered w-36" value={status} onChange={e => setStatus(e.target.value)}>
-                      <option value="">All</option>
-                      <option value="online">Online</option>
-                      <option value="offline">Offline</option>
-                      <option value="unknown">Unknown</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="opacity-70 whitespace-nowrap">Sort by</span>
-                    <select className="select select-bordered w-40" value={sortKey} onChange={e => setSortKey(e.target.value as typeof sortKey)}>
-                      <option value="stake">Stake</option>
-                      <option value="perf">Performance</option>
-                      <option value="uptime">Uptime</option>
-                    </select>
-                    <select className="select select-bordered w-28" value={sortOrder} onChange={e => setSortOrder(e.target.value as 'asc' | 'desc')}>
-                      <option value="asc">Asc</option>
-                      <option value="desc">Desc</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-2 ml-auto">
-                    <label className="label cursor-pointer w-auto justify-start gap-3">
-                      <span className="label-text">Table view</span>
-                      <input
-                        type="checkbox"
-                        className="toggle toggle-sm"
-                        checked={viewMode === 'list'}
-                        onChange={e => setViewMode(e.target.checked ? 'list' : 'cards')}
-                      />
-                    </label>
-                    {viewMode === 'cards' && (
-                      <select className="select select-bordered select-sm" value={cardVariant} onChange={e => setCardVariant(e.target.value as 'compact' | 'detailed')}>
-                        <option value="compact">Compact</option>
-                        <option value="detailed">Detailed</option>
-                      </select>
-                    )}
-                  </div>
-                </div>
-              </div>
+              {/* <OverviewStatsGrid nodes={nodes} loading={loading} /> */}
+              <DashboardFiltersBar
+                q={q}
+                setQ={setQ}
+                status={status}
+                setStatus={setStatus}
+                sortKey={sortKey}
+                setSortKey={setSortKey}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
+                cardVariant={cardVariant}
+                setCardVariant={setCardVariant}
+                onOpenMobileFilters={() => setFiltersOpen(true)}
+              />
           
         {viewMode === 'cards' ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 ">
-            {sorted.map(n => {
-              const s = onlineStats[n.id]
+            {(loading ? Array.from({ length: 9 }) : sorted).map((n, i) => {
+              if (loading) {
+                const sk: PNode = { id: `sk-${i}`, gossipAddress: '#', status: 'unknown' }
+                return (
+                  <PNodeCard key={`sk-${i}`} node={sk} variant={cardVariant} loading />
+                )
+              }
+              const s = onlineStats[(n as typeof sorted[number]).id]
               const uptimePct = s && s.obs > 0 ? Math.round(((s.up / s.obs) * 100) * 10) / 10 : undefined
-              const locationText = geo[n.id] ?? n.region ?? undefined
+              const locationText = geo[(n as typeof sorted[number]).id] ?? (n as typeof sorted[number]).region ?? undefined
               return (
-                <PNodeCard key={`${n.id}-${n.gossipAddress}`} node={n} uptimePct={uptimePct} locationText={locationText} variant={cardVariant} />
+                <PNodeCard key={`${(n as typeof sorted[number]).id}-${(n as typeof sorted[number]).gossipAddress}`} node={n as typeof sorted[number]} uptimePct={uptimePct} locationText={locationText} variant={cardVariant} />
               )
             })}
           </div>

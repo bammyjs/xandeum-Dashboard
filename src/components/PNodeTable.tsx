@@ -15,12 +15,47 @@ export default function PNodeTable({ locations, nodes }: Props) {
 
   return (
     <div className="card bg-base-100 shadow">
-      <div className="card-bod">
+      <div className="card-body">
         {loading ? (
-          <div className="space-y-2">
-            <div className="skeleton h-12"></div>
-            <div className="skeleton h-12"></div>
-            <div className="skeleton h-12"></div>
+          <div className="overflow-x-auto ">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Status</th>
+                  <th>Storage (GB)</th>
+                  <th>CPU (%)</th>
+                  <th>RAM Used (GB)</th>
+                  <th>RAM Total (GB)</th>
+                  <th>RAM Used (%)</th>
+                  <th>Uptime (h)</th>
+                  <th>Active Streams</th>
+                  <th>Packets Rx/Tx</th>
+                  <th>Location</th>
+                  <th>Version</th>
+                  <th>Last Seen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <tr key={i}>
+                    <td><div className="skeleton h-4 w-32"></div></td>
+                    <td><div className="skeleton h-4 w-16"></div></td>
+                    <td><div className="skeleton h-4 w-20"></div></td>
+                    <td><div className="skeleton h-4 w-16"></div></td>
+                    <td><div className="skeleton h-4 w-20"></div></td>
+                    <td><div className="skeleton h-4 w-20"></div></td>
+                    <td><div className="skeleton h-4 w-16"></div></td>
+                    <td><div className="skeleton h-4 w-20"></div></td>
+                    <td><div className="skeleton h-4 w-16"></div></td>
+                    <td><div className="skeleton h-4 w-28"></div></td>
+                    <td><div className="skeleton h-4 w-32"></div></td>
+                    <td><div className="skeleton h-4 w-20"></div></td>
+                    <td><div className="skeleton h-4 w-28"></div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : data.length === 0 ? (
           <div className="text-center text-sm opacity-70">No pNodes found</div>

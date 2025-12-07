@@ -1,6 +1,6 @@
 import { } from 'react'
 
-type SortKey = 'stake' | 'perf' | 'uptime' | ''
+type SortKey = 'storage' | 'perf' | 'uptime' | ''
 type ViewMode = 'cards' | 'list'
 type CardVariant = 'compact' | 'detailed'
 
@@ -21,13 +21,16 @@ type Props = {
   setCardVariant: (v: CardVariant) => void
 }
 
-export default function MobileFiltersModal({ open, onClose, q, setQ, status, setStatus, sortKey, setSortKey, sortOrder, setSortOrder, viewMode, setViewMode, cardVariant, setCardVariant }: Props) {
+export default function MobileFiltersModal({ open, onClose, status, setStatus, sortKey, setSortKey, sortOrder, setSortOrder, viewMode, setViewMode, cardVariant, setCardVariant }: Props) {
   return (
-    <dialog className="modal modal-bottom lg:hidden" open={open}>
+    <dialog className="modal modal-bottom lg:hidden " open={open}>
       <div className="modal-box">
+        <div className='flex justify-between items-center'>
         <h3 className="font-bold text-lg">Filters</h3>
+        <button onClick={onClose} className="btn btn-sm btn-circle  p-2 flex items-center justify-center">✕</button>
+
+        </div>
         <div className="space-y-4 mt-3">
-          <input type="text" placeholder="Search by name or node ID..." className="input input-bordered w-full" value={q} onChange={e => setQ(e.target.value)} />
           <div className="flex items-center gap-3">
             <span className="opacity-70">Status</span>
             <select className="select select-bordered w-36" value={status} onChange={e => setStatus(e.target.value)}>
@@ -40,7 +43,7 @@ export default function MobileFiltersModal({ open, onClose, q, setQ, status, set
           <div className="flex items-center gap-3">
             <span className="opacity-70">Sort by</span>
             <select className="select select-bordered w-40" value={sortKey} onChange={e => setSortKey(e.target.value as SortKey)}>
-              <option value="stake">Stake</option>
+              <option value="storage">Storage</option>
               <option value="perf">Performance</option>
               <option value="uptime">Uptime</option>
             </select>
@@ -67,13 +70,7 @@ export default function MobileFiltersModal({ open, onClose, q, setQ, status, set
             )}
           </div>
         </div>
-        <div className="modal-action">
-          <button className="btn" onClick={onClose}>Close</button>
-        </div>
       </div>
-      <form method="dialog" className="modal-backdrop">
-        <button onClick={onClose}>Close</button>
-      </form>
     </dialog>
   )
 }
